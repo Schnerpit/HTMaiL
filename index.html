@@ -100,4 +100,55 @@
 </script>
 
 </body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking Cookie Example</title>
+</head>
+<body>
+
+<script>
+    // Function to generate a random unique ID
+    function generateUniqueId() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
+    // Function to create or get the tracking cookie
+    function setTrackingCookie(cookieName, days) {
+        // Check if the cookie already exists
+        let cookieValue = getCookie(cookieName);
+        if (!cookieValue) {
+            // If not, generate a new unique ID
+            cookieValue = generateUniqueId();
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${cookieName}=${cookieValue}; expires=${date.toUTCString()}; path=/; SameSite=Strict; Secure`;
+            console.log(`Tracking cookie created: ${cookieName}=${cookieValue}`);
+        } else {
+            console.log(`Tracking cookie found: ${cookieName}=${cookieValue}`);
+        }
+    }
+
+    // Function to get the value of a specific cookie
+    function getCookie(name) {
+        const nameEQ = name + "=";
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let c = cookies[i].trim();
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length);
+        }
+        return null;
+    }
+
+    // Set a tracking cookie with a unique ID that expires in 30 days
+    setTrackingCookie('tracking_id', 30);
+</script>
+
+</body>
+</html>
 </html>
