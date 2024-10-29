@@ -3,32 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bluetooth Device Connection</title>
+    <title>Bluetooth Scan</title>
 </head>
 <body>
-    <button id="connect">Connect to Bluetooth Device</button>
+    <button id="scan">Scan for Bluetooth Devices</button>
     <p id="status"></p>
 
     <script>
-        document.getElementById('connect').addEventListener('click', async () => {
+        document.getElementById('scan').addEventListener('click', async () => {
             try {
-                // Request the Bluetooth device with specific filters or services
+                // Request Bluetooth device with no specific filters (you can specify services if needed)
                 const device = await navigator.bluetooth.requestDevice({
-                    filters: [{ services: ['battery_service'] }] // Example service
+                    acceptAllDevices: true // Allows all Bluetooth devices to show up in the scan
                 });
-                
-                document.getElementById('status').textContent = `Connected to device: ${device.name}`;
+
+                document.getElementById('status').textContent = `Connected to: ${device.name}`;
 
                 // Optional: Connect to the device’s GATT server
                 const server = await device.gatt.connect();
-                const service = await server.getPrimaryService('battery_service');
-                const batteryLevelCharacteristic = await service.getCharacteristic('battery_level');
-                
-                // Read battery level as an example
-                const batteryLevel = await batteryLevelCharacteristic.readValue();
-                const level = batteryLevel.getUint8(0);
-                document.getElementById('status').textContent += ` - Battery Level: ${level}%`;
-
+                document.getElementById('status').textContent += ` - Connection successful!`;
             } catch (error) {
                 document.getElementById('status').textContent = `Error: ${error}`;
                 console.error(error);
